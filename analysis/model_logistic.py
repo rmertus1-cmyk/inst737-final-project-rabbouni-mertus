@@ -1,60 +1,85 @@
 from pathlib import Path
 import pandas as pd
+import logging
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, roc_auc_score
+from sklearn.metrics import classification_report, roc_auc_score, confusion_matrix
 
 
 def run_logistic_model():
+    """
+    Train logistic regression model and save evaluation metrics.
+    """
 
-    project_root = Path(__file__).resolve().parents[1]
+    logging.info("Logistic: starting model training")
 
-    data_path = project_root / "data" / "transformed" / "modeling_table.csv"
+    try:
+        project_root = Path(__file__).resolve().parents[1]
 
-    output_dir = project_root / "data" / "model_outputs"
-    output_dir.mkdir(exist_ok=True)
+        data_path = project_root / "data" / "transformed" / "modeling_table.csv"
 
-    df = pd.read_csv(data_path)
+        output_dir = project_root / "data" / "model_outputs"
+        output_dir.mkdir(exist_ok=True)
 
-    df = df.dropna()
+        logging.info(f"Reading modeling table: {data_path}")
+        df = pd.read_csv(data_path)
 
-    features = [
-        "tmin",
-        "tmax",
-        "prcp",
-        "snow",
-        "freeze_flag",
-        "freeze_thaw_flag"
-    ]
+        df = df.dropna()
 
-    X = df[features]
-    y = df["break_flag"]
+        features = [
+            "tmin",
+            "tmax",
+            "prcp",
+            "snow",
+            "freeze_flag",
+            "freeze_thaw_flag"
+        ]
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y,
-        test_size=0.2,
-        random_state=42
-    )
+        X = df[features]
+        y = df["break_flag"]
 
-    model = LogisticRegression(max_iter=1000)
+        logging.info("Splitting data into train/test")
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y,
+            test_size=0.2,
+            random_state=42
+        )
 
-    model.fit(X_train, y_train)
+        model = LogisticRegression(max_iter=1000)
 
-    preds = model.predict(X_test)
-    probs = model.predict_proba(X_test)[:,1]
+        logging.info("Training logistic regression model")
+        model.fit(X_train, y_train)
 
-    report = classification_report(y_test, preds, output_dict=True)
+        preds = model.predict(X_test)
+        probs = model.predict_proba(X_test)[:, 1]
 
-    report_df = pd.DataFrame(report).transpose()
+        logging.info("Generating evaluation metrics")
 
-    report_df.to_csv(output_dir / "logistic_metrics.csv")
+        report = classification_report(y_test, preds, output_dict=True)
+        report_df = pd.DataFrame(report).transpose()
+        report_df.to_csv(output_dir / "logistic_metrics.csv")
 
-    roc = roc_auc_score(y_test, probs)
+        roc = roc_auc_score(y_test, probs)
+        roc_df = pd.DataFrame({"roc_auc": [roc]})
+        roc_df.to_csv(output_dir / "logistic_roc.csv", index=False)
 
-    roc_df = pd.DataFrame({"roc_auc":[roc]})
+        cm = confusion_matrix(y_test, preds)
+        cm_df = pd.DataFrame(cm)
+        cm_df.to_csv(output_dir / "logistic_confusion_matrix.csv", index=False)
 
-    roc_df.to_csv(output_dir / "logistic_roc.csv", index=False)
+        logging.info(f"Logistic ROC AUC: {roc}")
+        logging.info("Saved logistic model outputs")
 
-    print("Saved model outputs")
+        return model
 
-    return model
+    except FileNotFoundError:
+        logging.exception("Logistic: file not found error")
+        raise
+
+    except KeyError:
+        logging.exception("Logistic: missing feature column")
+        raise
+
+    except Exception:
+        logging.exception("Logistic: unexpected error")
+        raise
