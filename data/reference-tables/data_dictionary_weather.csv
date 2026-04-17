@@ -1,0 +1,20 @@
+﻿attribute_name,description,data_type,example_vaue,unit
+STATION,Unique identifier for the weather station,String,US1MDMG0071,N/A
+NAME,Name and location of the weather station,String,"SILVER SPRING 5.6 N, MD US",N/A
+DATE,Date of the observation,Date (YYYY-MM-DD),2014-01-01,N/A
+DAPR,Number of days included in the multiday precipitation total (MDPR),Float,5.0,Days
+MDPR,Multiday precipitation total; used when DAPR is greater than 0,Float,0.08,Inches
+PRCP,"Precipitation (rain, melted snow)",Float,0.30,Inches
+SNOW,Snowfall,Float,2.5,Inches
+SNWD,Snow depth,Float,4.0,Inches
+TMAX,Maximum temperature for the day,Float,43.0,Degrees Fahrenheit
+TMIN,Minimum temperature for the day,Float,23.0,Degrees Fahrenheit
+TOBS,Temperature at the time of observation,Float,32.0,Degrees Fahrenheit
+WESD,Water equivalent of snow on the ground,Float,0.0,Inches
+WESF,Water equivalent of snowfall,Float,0.0,Inches
+WT01,"Weather type flag: Fog, ice fog, or freezing fog (may include heavy fog)",Float (binary flag),1.0,"1 = Yes, NaN = No"
+WT03,Weather type flag: Thunder,Float (binary flag),1.0,"1 = Yes, NaN = No"
+WT04,"Weather type flag: Ice pellets, sleet, snow pellets, or small hail",Float (binary flag),1.0,"1 = Yes, NaN = No"
+WT05,Weather type flag: Hail (may include small hail),Float (binary flag),1.0,"1 = Yes, NaN = No"
+WT06,Weather type flag: Glaze or rime,Float (binary flag),1.0,"1 = Yes, NaN = No"
+WT11,Weather type flag: High or damaging winds,Float (binary flag),1.0,"1 = Yes, NaN = No"

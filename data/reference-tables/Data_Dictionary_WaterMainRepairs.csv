@@ -1,0 +1,10 @@
+﻿attribute_name,description,data_type,example_vaue,unit
+Work Order Number,Unique identifier for each water main repair work order,Integer,3165008,N/A
+Date Received,Date the repair request was received,String (MM/DD/YYYY),06/30/2022,N/A
+Time of Day Received,"Time the repair request was received, in HH:MM format",String (HH:MM),07:51,N/A
+AM or PM Received,Indicates whether the request was received in the AM or PM,String (AM/PM),AM,N/A
+DATE COMPLETED,Date the repair work was completed,String (MM/DD/YYYY),06/30/2022,N/A
+TIME COMPLETED,"Time the repair work was completed, in HH:MM format",String (HH:MM),05:00,N/A
+AM PM COMPLETED,Indicates whether the repair was completed in the AM or PM,String (AM/PM),AM,N/A
+WORK DESCRIPTION CODE,Numeric code identifying the type of work performed,Integer,212,N/A
+WORK DESCRIPTION,Text description of the work performed corresponding to the work description code,String,REPAIR BROKEN MAIN,N/A
